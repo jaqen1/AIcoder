@@ -1,9 +1,10 @@
-package com.jaqen.aicoder.model.entity.dto;
+package com.jaqen.aicoder.model.entity.dto.user;
 
 import com.jaqen.aicoder.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
@@ -35,5 +36,6 @@ public class UserQueryRequest extends PageRequest implements Serializable {
      */
     private String userRole;
 
+    @Serial
     private static final long serialVersionUID = 1721143066495570776L;
 }

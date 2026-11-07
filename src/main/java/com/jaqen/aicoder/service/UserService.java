@@ -1,6 +1,6 @@
 package com.jaqen.aicoder.service;
 
-import com.jaqen.aicoder.model.entity.dto.UserQueryRequest;
+import com.jaqen.aicoder.model.entity.dto.user.UserQueryRequest;
 import com.jaqen.aicoder.model.entity.vo.LoginUserVO;
 import com.jaqen.aicoder.model.entity.vo.UserVO;
 import com.mybatisflex.core.query.QueryWrapper;

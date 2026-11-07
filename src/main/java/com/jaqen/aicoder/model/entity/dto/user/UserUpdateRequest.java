@@ -1,7 +1,8 @@
-package com.jaqen.aicoder.model.entity.dto;
+package com.jaqen.aicoder.model.entity.dto.user;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -32,5 +33,6 @@ public class UserUpdateRequest implements Serializable {
      */
     private String userRole;
 
+    @Serial
     private static final long serialVersionUID = -3383472759520746331L;
 }

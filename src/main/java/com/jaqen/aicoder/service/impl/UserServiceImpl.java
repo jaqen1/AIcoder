@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jaqen.aicoder.exception.BusinessException;
 import com.jaqen.aicoder.exception.ErrorCode;
-import com.jaqen.aicoder.model.entity.dto.UserQueryRequest;
+import com.jaqen.aicoder.model.entity.dto.user.UserQueryRequest;
 import com.jaqen.aicoder.model.entity.enums.UserRoleEnum;
 import com.jaqen.aicoder.model.entity.vo.LoginUserVO;
 import com.jaqen.aicoder.model.entity.vo.UserVO;
