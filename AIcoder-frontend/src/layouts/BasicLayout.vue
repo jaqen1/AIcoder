@@ -1,26 +1,30 @@
-<script setup lang="ts">
-import GlobalFooter from '@/components/GlobalFooter.vue'
-import GlobalHeader from '@/components/GlobalHeader.vue'
-</script>
-
 <template>
   <a-layout class="basic-layout">
+    <!-- 顶部导航栏 -->
     <GlobalHeader />
-    <a-layout-content class="basic-layout-content">
+    <!-- 主要内容区域 -->
+    <a-layout-content class="main-content">
       <router-view />
     </a-layout-content>
+    <!-- 底部版权信息 -->
     <GlobalFooter />
   </a-layout>
 </template>
 
+<script setup lang="ts">
+import GlobalHeader from '@/components/GlobalHeader.vue'
+import GlobalFooter from '@/components/GlobalFooter.vue'
+</script>
+
 <style scoped>
 .basic-layout {
-  min-height: 100vh;
+  background: none;
 }
 
-.basic-layout-content {
-  flex: 1;
-  padding: 24px;
-  background: #fff;
+.main-content {
+  width: 100%;
+  padding: 0;
+  background: none;
+  margin: 0;
 }
 </style>

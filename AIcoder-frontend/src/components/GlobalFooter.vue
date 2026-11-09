@@ -1,20 +1,37 @@
-<script setup lang="ts"></script>
-
 <template>
-  <a-layout-footer class="global-footer">
-    原创项目 by
-    <a href="https://github.com/jaqen1/AIcoder" target="_blank" rel="noopener noreferrer">jaqen</a>
+  <a-layout-footer class="footer">
+    <div class="footer-content">
+      <p class="copyright">
+        <a
+          href="https://github.com/jaqen1/AIcoder"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="author-link"
+        >
+          原创项目 by jaqen
+        </a>
+      </p>
+    </div>
   </a-layout-footer>
 </template>
 
+<script setup lang="ts">
+// 无需额外的响应式数据
+</script>
+
 <style scoped>
-.global-footer {
+.footer {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
   text-align: center;
-  color: rgba(0, 0, 0, 0.45);
-  background: #f5f5f5;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(102, 126, 234, 0.1);
 }
 
-.global-footer a {
-  color: #1677ff;
+.copyright {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
 }
 </style>

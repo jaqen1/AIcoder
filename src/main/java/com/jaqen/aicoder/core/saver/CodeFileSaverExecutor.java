@@ -5,6 +5,7 @@ import com.jaqen.aicoder.ai.model.MultiFileCodeResult;
 import com.jaqen.aicoder.exception.BusinessException;
 import com.jaqen.aicoder.exception.ErrorCode;
 import com.jaqen.aicoder.model.entity.enums.CodeGenTypeEnum;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.File;
 
@@ -23,14 +24,15 @@ public class CodeFileSaverExecutor {
     /**
      * 执行代码保存
      *
+     * @param appId 应用ID
      * @param codeResult  代码结果对象
      * @param codeGenType 代码生成类型
      * @return 保存的目录
      */
-    public static File executeSaver(Object codeResult, CodeGenTypeEnum codeGenType) {
+    public static File executeSaver(Object codeResult, CodeGenTypeEnum codeGenType, Long appId) {
         return switch (codeGenType) {
-            case HTML -> htmlCodeFileSaver.saveCode((HtmlCodeResult) codeResult);
-            case MULTI_FILE -> multiFileCodeFileSaver.saveCode((MultiFileCodeResult) codeResult);
+            case HTML -> htmlCodeFileSaver.saveCode((HtmlCodeResult) codeResult, appId);
+            case MULTI_FILE -> multiFileCodeFileSaver.saveCode((MultiFileCodeResult) codeResult, appId);
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR, "不支持的代码生成类型: " + codeGenType);
         };
     }

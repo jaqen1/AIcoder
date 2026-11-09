@@ -22,7 +22,7 @@ class AiCodeGeneratorServiceTest {
 
     @Test
     void generateMultiFileCode() {
-        MultiFileCodeResult multiFileCode = aiCodeGeneratorService.generateMultiFileCode("做个程序员jaqen的留言板");
+        MultiFileCodeResult multiFileCode = aiCodeGeneratorService.generateMultiFileCode("。");
         Assertions.assertNotNull(multiFileCode);
     }
 }
