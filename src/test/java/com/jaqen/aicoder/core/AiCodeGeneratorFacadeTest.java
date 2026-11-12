@@ -26,7 +26,7 @@ class AiCodeGeneratorFacadeTest {
 
     @Test
     void generatestream() {
-        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream("创建炫酷个人博客网站，这是一个现代风格的响应式个人博客网站，包含导航栏、特色文章区、博客文章列表和页脚。网站使用了CSS动画和JavaScript交互来创造炫酷效果。", CodeGenTypeEnum.MULTI_FILE,2);
+        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream("创建一个现代化的个人博客网站，包含文章列表、详情页、分类标签、搜索功能、评论系统和个人简介页面。采用简洁的设计风格，支持响应式布局，文章支持Markdown格式，首页展示最新文章和热门推荐。。", CodeGenTypeEnum.MULTI_FILE,6);
         List<String> result = codeStream.collectList().block();
         Assertions.assertNotNull(result);
 

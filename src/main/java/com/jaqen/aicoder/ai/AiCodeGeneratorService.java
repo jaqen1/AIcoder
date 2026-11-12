@@ -44,7 +44,14 @@ public interface AiCodeGeneratorService {
     @SystemMessage(fromResource = "prompt/codegen-multi-file-system-prompt.txt")
     Flux<String> generateMultiFileCodeStream(String userMessage);
 
-
+    /**
+     * 根据已有 HTML 补全 CSS 与 JS（流式）
+     *
+     * @param userMessage 包含 HTML 与需求说明的消息
+     * @return 仅包含 css / javascript 代码块的流
+     */
+    @SystemMessage(fromResource = "prompt/codegen-css-js-system-prompt.txt")
+    Flux<String> generateCssJsCodeStream(String userMessage);
 
 }
 
