@@ -146,9 +146,9 @@ public class AiCodeGeneratorServiceFactory {
                 .baseUrl(baseUrl)
                 .apiKey(apiKey)
                 .modelName(modelName)
-                .returnThinking(false)
-                .reasoningEffort("none")
-                .customParameters(Map.of("thinking", Map.of("type", "disabled")))
+                //.returnThinking(false)
+              //  .reasoningEffort("none")
+              //  .customParameters(Map.of("thinking", Map.of("type", "disabled")))
                 .build();
     }
 
@@ -158,9 +158,9 @@ public class AiCodeGeneratorServiceFactory {
                 .apiKey(apiKey)
                 .modelName(modelName)
                 .maxTokens(streamingMaxTokens)
-                .returnThinking(false)
-                .reasoningEffort("none")
-                .customParameters(Map.of("thinking", Map.of("type", "disabled")))
+                //.returnThinking(false)
+              //  .reasoningEffort("none")
+              //  .customParameters(Map.of("thinking", Map.of("type", "disabled")))
                 .build();
     }
 
