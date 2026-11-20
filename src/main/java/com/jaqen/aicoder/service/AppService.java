@@ -1,6 +1,7 @@
 package com.jaqen.aicoder.service;
 
 import com.jaqen.aicoder.model.entity.User;
+import com.jaqen.aicoder.model.entity.dto.app.AppAddRequest;
 import com.jaqen.aicoder.model.entity.dto.app.AppQueryRequest;
 import com.jaqen.aicoder.model.entity.vo.AppVO;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -16,6 +17,16 @@ import java.util.List;
  * @author <a href="https://github.com/jaqen1">jaqen</a>
  */
 public interface AppService extends IService<App> {
+
+
+    /**
+     *  创建应用
+     *
+     * @param appAddRequest
+     * @param loginUser
+     * @return
+     */
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
 
     /**
      *  获取应用 封装类
