@@ -1,5 +1,6 @@
 package com.jaqen.aicoder.ai;
 
+import com.jaqen.aicoder.utils.SpringContextUtil;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.Resource;
@@ -16,14 +17,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AiCodeGenTypeRoutingServiceFactory {
 
-    @Resource(name = "routingChatModel")
-    private ChatModel routingChatModel;
+    @Bean
+    public AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService() {
+        return createAiCodeGenTypeRoutingService();
+
+    }
+
 
     /**
      * 创建AI代码生成类型路由服务实例
      */
-    @Bean
-    public AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService() {
+    public AiCodeGenTypeRoutingService createAiCodeGenTypeRoutingService() {
+        ChatModel routingChatModel = SpringContextUtil.getBean("routingChatModel", ChatModel.class);
+
         return AiServices.builder(AiCodeGenTypeRoutingService.class)
                 .chatModel(routingChatModel)
                 .build();

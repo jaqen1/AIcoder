@@ -6,6 +6,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jaqen.aicoder.ai.AiCodeGenTypeRoutingService;
+import com.jaqen.aicoder.ai.AiCodeGenTypeRoutingServiceFactory;
 import com.jaqen.aicoder.constant.AppConstant;
 import com.jaqen.aicoder.core.AiCodeGeneratorFacade;
 import com.jaqen.aicoder.core.builder.VueProjectBuilder;
@@ -23,6 +24,7 @@ import com.jaqen.aicoder.model.entity.vo.UserVO;
 import com.jaqen.aicoder.service.ChatHistoryService;
 import com.jaqen.aicoder.service.ScreenshotService;
 import com.jaqen.aicoder.service.UserService;
+import com.jaqen.aicoder.utils.SpringContextUtil;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.jaqen.aicoder.model.entity.App;
@@ -70,6 +72,10 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
     @Resource
     private ScreenshotService screenshotService;
 
+    @Resource
+    private AiCodeGenTypeRoutingServiceFactory aiCodeGenTypeRoutingServiceFactory;
+
+
     @Override
     public Flux<String> chatToGenCode(Long appId, String message, User loginUser) {
         // 1. 参数校验
@@ -100,8 +106,6 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
 
 
 
-    @Resource
-    private AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService;
 
     @Override
     public Long createApp(AppAddRequest appAddRequest, User loginUser) {
@@ -114,6 +118,11 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
         app.setUserId(loginUser.getId());
         // 应用名称暂时为 initPrompt 前 12 位
         app.setAppName(initPrompt.substring(0, Math.min(initPrompt.length(), 12)));
+
+//        AiCodeGenTypeRoutingService createAiCodeGenTypeRoutingService = SpringContextUtil
+//                .getBean("createAiCodeGenTypeRoutingService", AiCodeGenTypeRoutingService.class);
+        // 每次创建一个新的 bean，解决并发问题
+        AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService = aiCodeGenTypeRoutingServiceFactory.createAiCodeGenTypeRoutingService();
         // 使用 AI 智能选择代码生成类型
         CodeGenTypeEnum selectedCodeGenType = aiCodeGenTypeRoutingService.routeCodeGenType(initPrompt);
         app.setCodeGenType(selectedCodeGenType.getValue());

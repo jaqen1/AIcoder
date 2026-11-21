@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "langchain4j.open-ai.chat-model")
 @Data
+@Deprecated
 public class ReasoningStreamingChatModelConfig {
 
     private String baseUrl;
@@ -18,6 +19,7 @@ public class ReasoningStreamingChatModelConfig {
 
     /**
      * 推理流式模型（用于 Vue 项目生成，带工具调用）
+     * ds 模型自带思考，不用区分，参数设置中 可调节强度，或者关闭，并且考虑并发 需要多例，因此弃用
      */
     @Bean
     public StreamingChatModel reasoningStreamingChatModel() {

@@ -21,6 +21,7 @@ public class StreamingChatModelConfig {
 
     private Integer maxTokens;
 
+    //思考模式不支持 temperature、presence_penalty、frequency_penalty 参数。
     private Double temperature;
 
     private boolean logRequests;
@@ -30,7 +31,7 @@ public class StreamingChatModelConfig {
     @Bean
     @Scope("prototype")
     public StreamingChatModel streamingChatModelPrototype() {
-        // vue 的实例 模型
+        //  通用 模型 的实例
         return OpenAiStreamingChatModel.builder()
                 .apiKey(apiKey)
                 .baseUrl(baseUrl)

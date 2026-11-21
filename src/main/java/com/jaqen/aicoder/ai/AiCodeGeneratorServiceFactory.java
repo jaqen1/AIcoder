@@ -7,6 +7,7 @@ import com.jaqen.aicoder.exception.BusinessException;
 import com.jaqen.aicoder.exception.ErrorCode;
 import com.jaqen.aicoder.model.entity.enums.CodeGenTypeEnum;
 import com.jaqen.aicoder.service.ChatHistoryService;
+import com.jaqen.aicoder.utils.SpringContextUtil;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -17,6 +18,7 @@ import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,8 +36,7 @@ public class AiCodeGeneratorServiceFactory {
     @Resource
     private ChatHistoryService chatHistoryService;
 
-    @Resource
-    private StreamingChatModel reasoningStreamingChatModel;
+
 
 
     @Value("${langchain4j.open-ai.chat-model.base-url}")
@@ -103,26 +104,34 @@ public class AiCodeGeneratorServiceFactory {
         chatHistoryService.loadChatHistoryToMemory(appId, chatMemory, 20);
 
         return switch (codeGenType) {
-            case VUE_PROJECT ->
-                // VUE 项目 生成， 使用工具调用 和 推理模型
-                AiServices.builder(AiCodeGeneratorService.class)
+            case VUE_PROJECT -> {
+                // 使用多例模式的streamingChatModelPrototype,解决并发问题   VUE 项目 生成， 使用工具调用 和 推理模型
+                StreamingChatModel streamingChatModelPrototype = SpringContextUtil
+                        .getBean("streamingChatModelPrototype", StreamingChatModel.class);
+                yield AiServices.builder(AiCodeGeneratorService.class)
                         .chatModel(buildChatModel())
-                        .streamingChatModel(reasoningStreamingChatModel)
+                        .streamingChatModel(streamingChatModelPrototype)
                         .chatMemoryProvider(memoryId -> chatMemory)
                         .tools(new FileWriteTool())
+                        .maxSequentialToolsInvocations(20)
                         // 处理 工具 幻觉问题
                         .hallucinatedToolNameStrategy(toolExecutionRequest ->
                                 ToolExecutionResultMessage.from(toolExecutionRequest,
                                         "error: there is no tools called "+ toolExecutionRequest.name()))
                         .build();
+            }
+            case HTML , MULTI_FILE ->{
+                // 使用多例模式的streamingChatModelPrototype，普通类型 使用 流式 对话模型
 
-            case HTML , MULTI_FILE ->
-                // 普通类型 使用 流式 对话模型
-                 AiServices.builder(AiCodeGeneratorService.class)
+                StreamingChatModel buildStreamingChatModel = SpringContextUtil
+                        .getBean("streamingChatModelPrototype", StreamingChatModel.class);
+
+                yield AiServices.builder(AiCodeGeneratorService.class)
                         .chatModel(buildChatModel())
-                        .streamingChatModel(buildStreamingChatModel())
+                        .streamingChatModel(buildStreamingChatModel)
                         .chatMemory(chatMemory)
                         .build();
+            }
 
 
             default -> throw new BusinessException(ErrorCode.PARAMS_ERROR,"不支持的代码生成类型"+codeGenType.getValue());
