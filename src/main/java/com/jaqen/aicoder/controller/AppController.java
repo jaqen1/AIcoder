@@ -1,5 +1,6 @@
 package com.jaqen.aicoder.controller;
 
+import cn.hutool.ai.core.Message;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -16,6 +17,8 @@ import com.jaqen.aicoder.model.entity.User;
 import com.jaqen.aicoder.model.entity.dto.app.*;
 import com.jaqen.aicoder.model.entity.enums.CodeGenTypeEnum;
 import com.jaqen.aicoder.model.entity.vo.AppVO;
+import com.jaqen.aicoder.ratelimit.annotation.RateLimit;
+import com.jaqen.aicoder.ratelimit.enums.RateLimitType;
 import com.jaqen.aicoder.service.ProjectDownloadService;
 import com.jaqen.aicoder.service.UserService;
 import com.mybatisflex.core.paginate.Page;
@@ -23,6 +26,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +68,7 @@ public class AppController {
      * @return 生成结果流
      */
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @RateLimit( limitType =  RateLimitType.USER ,rate = 5,rateInterval = 60, message = "请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                       @RequestParam String message,
                                       HttpServletRequest request) {
@@ -283,6 +288,11 @@ public class AppController {
      * @return 精选应用列表
      */
     @PostMapping("/good/list/page/vo")
+    @Cacheable(
+            value = "good_app_page",
+            key = "T(com.jaqen.aicoder.utils.CacheKeyUtils).generateKey(#appQueryRequest)",
+            condition = "#appQueryRequest.pageNum <= 10"
+    )
     public BaseResponse<Page<AppVO>> listGoodAppVOByPage(@RequestBody AppQueryRequest appQueryRequest) {
         ThrowUtils.throwIf(appQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 限制每页最多 20 个

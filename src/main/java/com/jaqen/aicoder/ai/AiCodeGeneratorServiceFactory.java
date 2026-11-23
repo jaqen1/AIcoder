@@ -2,6 +2,8 @@ package com.jaqen.aicoder.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.jaqen.aicoder.ai.guardrail.PromptSafetyInputGuardrail;
+import com.jaqen.aicoder.ai.guardrail.RetryOutputGuardrail;
 import com.jaqen.aicoder.ai.tools.FileWriteTool;
 import com.jaqen.aicoder.exception.BusinessException;
 import com.jaqen.aicoder.exception.ErrorCode;
@@ -118,6 +120,10 @@ public class AiCodeGeneratorServiceFactory {
                         .hallucinatedToolNameStrategy(toolExecutionRequest ->
                                 ToolExecutionResultMessage.from(toolExecutionRequest,
                                         "error: there is no tools called "+ toolExecutionRequest.name()))
+                        .maxSequentialToolsInvocations(20)
+                        .inputGuardrails(new PromptSafetyInputGuardrail())
+                        //  会导致流式输出，不及时
+                        // .outputGuardrails(new RetryOutputGuardrail())
                         .build();
             }
             case HTML , MULTI_FILE ->{
@@ -130,6 +136,7 @@ public class AiCodeGeneratorServiceFactory {
                         .chatModel(buildChatModel())
                         .streamingChatModel(buildStreamingChatModel)
                         .chatMemory(chatMemory)
+                        .inputGuardrails(new PromptSafetyInputGuardrail())
                         .build();
             }
 

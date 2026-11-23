@@ -21,7 +21,7 @@ spring:
       host: localhost
       port: 6379
       password:
-      ttl: 3600
+      ttl: 3600   #单位 秒
       database: 0
 
 server:
@@ -44,3 +44,35 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+
+
+## 添加 COS 对象存储配置（需要从腾讯云获取）
+#cos:
+#  client:
+#    host: xxxx
+#    secretId: xxx
+#    secretKey: xxxx
+#    region: xxxx
+#    bucket: xxxx
+
+
+## AI
+#langchain4j:
+#  open-ai:
+#    chat-model:
+#      #      base-url: https://api.deepseek.com
+#      #      api-key:
+#      #      model-name: deepseek-flash
+#      log-requests: true
+#      log-responses: true
+#      #      strict-json-schema: true
+#      #      response-format: json_object
+#      max-retries: 1
+#      reasoning-effort: low
+
+#    routing-chat-model:
+#      base-url: https://xxxx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
+#      api-key: xxxx
+#      model-name: qwen3.8-flash
+#      log-requests: true
+#      log-responses: true
